@@ -1,6 +1,8 @@
-import 'package:expense_manager/models/category_model.dart';
-import 'package:expense_manager/widgets/category/category_item.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/category_model.dart';
+import 'category_item.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({
@@ -8,7 +10,7 @@ class CategoryList extends StatelessWidget {
     required this.list,
   }) : super(key: key);
 
-  final List<CategoryModel> list;
+  final BuiltList<CategoryModel> list;
 
   @override
   Widget build(BuildContext context) {

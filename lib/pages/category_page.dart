@@ -1,4 +1,8 @@
-import 'package:expense_manager/routes/add_category.dart';
+import 'package:built_collection/built_collection.dart';
+
+import '../blocs/category_bloc.dart';
+import '../db/services/category_service.dart';
+import '../routes/add_category.dart';
 import 'package:flutter/material.dart';
 
 import '../models/category_model.dart';
@@ -12,50 +16,12 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  final List<CategoryModel> _listCategories = <CategoryModel>[];
+  late CategoryBloc _categoryBloc;
 
   @override
   void initState() {
     super.initState();
-    _initCategories();
-  }
-
-  _initCategories() {
-    var cat1 = CategoryModel().rebuild(
-      (b) => b
-        ..id = 0
-        ..title = 'Home Utils'
-        ..description = 'Home utilities related expenses'
-        ..iconCodePoint = Icons.home.codePoint,
-    );
-    _listCategories.add(cat1);
-
-    var cat2 = CategoryModel().rebuild(
-      (b) => b
-        ..id = 0
-        ..title = "Grocery"
-        ..description = "Grocery related expenses"
-        ..iconCodePoint = Icons.local_grocery_store.codePoint,
-    );
-    _listCategories.add(cat2);
-
-    var cat3 = CategoryModel().rebuild(
-      (b) => b
-        ..id = 0
-        ..title = "Food"
-        ..description = "Food related expenses"
-        ..iconCodePoint = Icons.fastfood.codePoint,
-    );
-    _listCategories.add(cat3);
-
-    var cat4 = CategoryModel().rebuild(
-      (b) => b
-        ..id = 0
-        ..title = "Auto"
-        ..description = "Car/Bike related expenses"
-        ..iconCodePoint = Icons.directions_bike.codePoint,
-    );
-    _listCategories.add(cat4);
+    _categoryBloc = CategoryBloc(CategoryServiceImpl());
   }
 
   @override
@@ -77,10 +43,19 @@ class _CategoryPageState extends State<CategoryPage> {
             child: const Text('Add New'),
           ),
         ),
-        Expanded(
-          child: CategoryList(
-            list: _listCategories,
-          ),
+        StreamBuilder(
+          stream: _categoryBloc.categoryListStream,
+          builder: (context, AsyncSnapshot<BuiltList<CategoryModel>> snapshot) {
+            if (!snapshot.hasData) return const CircularProgressIndicator();
+
+            final listCategories = snapshot.data!;
+
+            return Expanded(
+              child: CategoryList(
+                list: listCategories,
+              ),
+            );
+          },
         ),
       ],
     );
