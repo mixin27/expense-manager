@@ -49,11 +49,11 @@ class CategoryServiceImpl implements CategoryService {
     if (res.isEmpty) return BuiltList();
 
     var list = BuiltList<CategoryModel>();
-    res.forEach((element) {
+    for (var element in res) {
       var category = serializers.deserializeWith<CategoryModel>(
           CategoryModel.serializer, element);
       list = list.rebuild((b) => b..add(category!));
-    });
+    }
 
     return list.rebuild(
       (b) => b
