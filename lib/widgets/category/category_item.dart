@@ -29,12 +29,12 @@ class CategoryItem extends StatelessWidget {
           color: Theme.of(context).colorScheme.secondary,
         ),
         title: Text(
-          item.title!,
+          item.title ?? '',
           style: Theme.of(context).textTheme.bodyText1?.copyWith(
                 color: Theme.of(context).colorScheme.secondary,
               ),
         ),
-        subtitle: Text(item.description!),
+        subtitle: Text(item.description ?? ''),
       ),
     );
   }

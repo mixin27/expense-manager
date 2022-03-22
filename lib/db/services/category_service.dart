@@ -33,12 +33,9 @@ class CategoryServiceImpl implements CategoryService {
 
   Future<bool> categoryExists(String title) async {
     var db = await OfflineDbProvider.provider.database;
-    var res = await db.query("Category");
-
-    if (res.isEmpty) return false;
-
-    var entity = res.firstWhere((element) => element["title"] == title);
-    return entity.isNotEmpty;
+    var res =
+        await db.query("Category", where: '"title" = ?', whereArgs: [title]);
+    return res.isNotEmpty;
   }
 
   @override

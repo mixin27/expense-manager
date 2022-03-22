@@ -1,11 +1,10 @@
 import 'package:built_collection/built_collection.dart';
-
-import '../blocs/category_bloc.dart';
-import '../db/services/category_service.dart';
-import '../routes/add_category.dart';
+import 'package:expense_manager/db/services/category_service.dart';
 import 'package:flutter/material.dart';
 
+import '../blocs/category_bloc.dart';
 import '../models/category_model.dart';
+import '../routes/add_category.dart';
 import '../widgets/category/category_list.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -25,6 +24,12 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _categoryBloc.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -36,7 +41,9 @@ class _CategoryPageState extends State<CategoryPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddCategory(),
+                  builder: (context) => AddCategory(
+                    categoryBloc: _categoryBloc,
+                  ),
                 ),
               );
             },
@@ -46,13 +53,13 @@ class _CategoryPageState extends State<CategoryPage> {
         StreamBuilder(
           stream: _categoryBloc.categoryListStream,
           builder: (context, AsyncSnapshot<BuiltList<CategoryModel>> snapshot) {
-            if (!snapshot.hasData) return const CircularProgressIndicator();
+            if (!snapshot.hasData) return const Text('No category data found.');
 
             final listCategories = snapshot.data!;
 
             return Expanded(
               child: CategoryList(
-                list: listCategories,
+                listCategories: listCategories,
               ),
             );
           },

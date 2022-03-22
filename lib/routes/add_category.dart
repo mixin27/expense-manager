@@ -1,24 +1,25 @@
-import 'package:expense_manager/models/category_model.dart';
 import 'package:flutter/material.dart';
 
 import '../blocs/category_bloc.dart';
-import '../db/services/category_service.dart';
+import '../models/category_model.dart';
 
 class AddCategory extends StatefulWidget {
-  const AddCategory({Key? key}) : super(key: key);
+  const AddCategory({
+    Key? key,
+    required this.categoryBloc,
+  }) : super(key: key);
+
+  final CategoryBloc categoryBloc;
 
   @override
   State<AddCategory> createState() => _AddCategoryState();
 }
 
 class _AddCategoryState extends State<AddCategory> {
-  late CategoryBloc _categoryBloc;
-
   @override
   void initState() {
     super.initState();
-    _categoryBloc = CategoryBloc(CategoryServiceImpl());
-    _categoryBloc.updateCreateCategory(CategoryModel());
+    widget.categoryBloc.updateCreateCategory(CategoryModel());
   }
 
   @override
@@ -30,7 +31,7 @@ class _AddCategoryState extends State<AddCategory> {
       body: Container(
         padding: const EdgeInsets.all(12.0),
         child: StreamBuilder(
-          stream: _categoryBloc.createCategoryStream,
+          stream: widget.categoryBloc.createCategoryStream,
           builder: (context, AsyncSnapshot<CategoryModel?> snapshot) {
             return Column(
               children: [
@@ -43,7 +44,7 @@ class _AddCategoryState extends State<AddCategory> {
 
                     var category = snapshot.data!;
                     var updated = category.rebuild((b) => b..title = value);
-                    _categoryBloc.updateCreateCategory(updated);
+                    widget.categoryBloc.updateCreateCategory(updated);
                   },
                 ),
                 TextField(
@@ -57,7 +58,7 @@ class _AddCategoryState extends State<AddCategory> {
                     var category = snapshot.data!;
                     var updated =
                         category.rebuild((b) => b..description = value);
-                    _categoryBloc.updateCreateCategory(updated);
+                    widget.categoryBloc.updateCreateCategory(updated);
                   },
                 ),
                 Container(
@@ -80,7 +81,7 @@ class _AddCategoryState extends State<AddCategory> {
                   onPressed: snapshot.data?.title == null
                       ? null
                       : () async {
-                          var createdId = await _categoryBloc
+                          var createdId = await widget.categoryBloc
                               .createNewCategory(snapshot.data!);
 
                           if (createdId > 0) {
@@ -129,7 +130,6 @@ class _AddCategoryState extends State<AddCategory> {
       Icons.favorite,
       Icons.favorite_border,
       Icons.emoji_transportation,
-      Icons.work,
     ];
 
     return GridView.count(
@@ -140,7 +140,7 @@ class _AddCategoryState extends State<AddCategory> {
           onPressed: () {
             var updated =
                 category?.rebuild((b) => b..iconCodePoint = iconData.codePoint);
-            _categoryBloc.updateCreateCategory(updated!);
+            widget.categoryBloc.updateCreateCategory(updated!);
           },
           icon: Icon(
             iconData,

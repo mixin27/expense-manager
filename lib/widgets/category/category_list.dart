@@ -7,17 +7,17 @@ import 'category_item.dart';
 class CategoryList extends StatelessWidget {
   const CategoryList({
     Key? key,
-    required this.list,
+    required this.listCategories,
   }) : super(key: key);
 
-  final BuiltList<CategoryModel> list;
+  final BuiltList<CategoryModel> listCategories;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: list.length,
+      itemCount: listCategories.length,
       itemBuilder: (context, index) {
-        var category = list[index];
+        var category = listCategories[index];
         return CategoryItem(
           item: category,
         );

@@ -33,4 +33,9 @@ class CategoryBloc {
   final _categoryListController = BehaviorSubject<BuiltList<CategoryModel>>();
   Stream<BuiltList<CategoryModel>> get categoryListStream =>
       _categoryListController.stream;
+
+  dispose() {
+    _createCategoryController.close();
+    _categoryListController.close();
+  }
 }
