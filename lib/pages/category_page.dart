@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:expense_manager/db/services/category_service.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,15 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   void initState() {
     super.initState();
+    initCategoryBloc();
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    initCategoryBloc();
+    setState(() {});
+  }
+
+  initCategoryBloc() {
     _categoryBloc = CategoryBloc(CategoryServiceImpl());
   }
 
@@ -45,7 +56,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     categoryBloc: _categoryBloc,
                   ),
                 ),
-              );
+              ).then(onGoBack);
             },
             child: const Text('Add New'),
           ),
@@ -60,6 +71,8 @@ class _CategoryPageState extends State<CategoryPage> {
             return Expanded(
               child: CategoryList(
                 listCategories: listCategories,
+                onDeletePressed: (categoryId) =>
+                    _categoryBloc.deleteCategory(categoryId),
               ),
             );
           },

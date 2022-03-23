@@ -11,6 +11,7 @@ class CategoryBloc {
     _getCategories();
   }
 
+  // Getting list of categories
   _getCategories() {
     categoryService.getAllCategories().then((cats) {
       _categoryListController.sink.add(cats);
@@ -18,6 +19,10 @@ class CategoryBloc {
       _categoryListController.sink.addError(err);
     });
   }
+
+  final _categoryListController = BehaviorSubject<BuiltList<CategoryModel>>();
+  Stream<BuiltList<CategoryModel>> get categoryListStream =>
+      _categoryListController.stream;
 
   final _createCategoryController = BehaviorSubject<CategoryModel>();
   Stream<CategoryModel> get createCategoryStream =>
@@ -30,9 +35,11 @@ class CategoryBloc {
     return await categoryService.createCategory(category);
   }
 
-  final _categoryListController = BehaviorSubject<BuiltList<CategoryModel>>();
-  Stream<BuiltList<CategoryModel>> get categoryListStream =>
-      _categoryListController.stream;
+  Future<void> deleteCategory(int categoryId) async {
+    await categoryService.deleteCategory(categoryId).then((value) {
+      _getCategories();
+    });
+  }
 
   dispose() {
     _createCategoryController.close();

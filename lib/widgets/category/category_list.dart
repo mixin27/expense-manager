@@ -8,9 +8,11 @@ class CategoryList extends StatelessWidget {
   const CategoryList({
     Key? key,
     required this.listCategories,
+    required this.onDeletePressed,
   }) : super(key: key);
 
   final BuiltList<CategoryModel> listCategories;
+  final Function(int categoryId) onDeletePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,9 @@ class CategoryList extends StatelessWidget {
         var category = listCategories[index];
         return CategoryItem(
           item: category,
+          onDeleteCategory: (id) {
+            onDeletePressed(id);
+          },
         );
       },
     );

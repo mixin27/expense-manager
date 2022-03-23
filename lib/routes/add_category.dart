@@ -23,6 +23,12 @@ class _AddCategoryState extends State<AddCategory> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    widget.categoryBloc.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -87,6 +93,12 @@ class _AddCategoryState extends State<AddCategory> {
                           if (createdId > 0) {
                             Navigator.of(context).pop();
                           } else {
+                            // showSnackBar(
+                            //   context,
+                            //   const SnackBar(
+                            //     content: Text('Error on creating Category.'),
+                            //   ),
+                            // );
                             // show error
                           }
                         },

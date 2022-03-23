@@ -6,9 +6,11 @@ class CategoryItem extends StatelessWidget {
   const CategoryItem({
     Key? key,
     required this.item,
+    required this.onDeleteCategory,
   }) : super(key: key);
 
   final CategoryModel item;
+  final Function(int categoryId) onDeleteCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,8 @@ class CategoryItem extends StatelessWidget {
       child: ListTile(
         onTap: () {},
         leading: Icon(
-          IconData(item.iconCodePoint!, fontFamily: 'MaterialIcons'),
+          IconData(item.iconCodePoint ?? Icons.error.codePoint,
+              fontFamily: 'MaterialIcons'),
           color: Theme.of(context).colorScheme.secondary,
         ),
         title: Text(
@@ -35,6 +38,11 @@ class CategoryItem extends StatelessWidget {
               ),
         ),
         subtitle: Text(item.description ?? ''),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          color: Theme.of(context).primaryColorLight,
+          onPressed: () => onDeleteCategory(item.id!),
+        ),
       ),
     );
   }

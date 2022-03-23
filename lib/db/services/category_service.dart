@@ -7,6 +7,7 @@ import '../../models/category_model.dart';
 abstract class CategoryService {
   Future<BuiltList<CategoryModel>> getAllCategories();
   Future<int> createCategory(CategoryModel category);
+  Future<int> deleteCategory(int categoryId);
 }
 
 class CategoryServiceImpl implements CategoryService {
@@ -58,5 +59,13 @@ class CategoryServiceImpl implements CategoryService {
           (a, b) => a.title!.compareTo(b.title!),
         ),
     );
+  }
+
+  @override
+  Future<int> deleteCategory(int categoryId) async {
+    var db = await OfflineDbProvider.provider.database;
+    var result =
+        db.delete("Category", where: "id = ?", whereArgs: [categoryId]);
+    return result;
   }
 }
