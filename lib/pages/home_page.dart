@@ -1,3 +1,4 @@
+import 'package:expense_manager/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
 import 'category_page.dart';
@@ -36,12 +37,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          Center(
-            child: Text(
-              'HOME',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ),
+          const DashboardPage(),
           const CategoryPage(),
           Center(
             child: Text(
